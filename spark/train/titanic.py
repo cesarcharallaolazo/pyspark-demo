@@ -18,6 +18,8 @@ from train.evaluate import get_metric
 
 
 def train_titanic(spark: SparkSession, info):
+    print("TRAINING ...", flush=True)
+
     schema = StructType(
         [StructField("PassengerId", StringType()),
          StructField("Survival", DoubleType()),
@@ -81,6 +83,8 @@ def train_titanic(spark: SparkSession, info):
     )
     lr_params = {param[0].name: param[1] for param in
                  lr.extractParamMap().items()}
+    print("hyperparameters ->", flush=True)
+    print(lr_params, flush=True)
 
     pipeline = Pipeline().setStages(
         [sexIndexer, cabinIndexer, embarkedIndexer, vectorAssembler, lr]
@@ -93,7 +97,6 @@ def train_titanic(spark: SparkSession, info):
     df_pipeline_predicted \
         .select("PassengerId", "Survival", "prediction") \
         .show(55, truncate=False)
-    # model.transform(testDF).show(55, truncate=False)
 
     for metric in ["areaUnderROC", "areaUnderPR", "accuracy",
                    "weightedPrecision", "weightedRecall", "f1"]:
@@ -110,6 +113,8 @@ def train_titanic(spark: SparkSession, info):
 
 
 def predict_titanic(spark: SparkSession, info):
+    print("TESTING ...", flush=True)
+
     schema = StructType(
         [StructField("PassengerId", StringType()),
          StructField("Survival", DoubleType()),
@@ -133,7 +138,7 @@ def predict_titanic(spark: SparkSession, info):
 
     df = df_raw.na.fill(0)
 
-    model = get_model(info, "20222005_074123")
+    model = get_model(info, "20220906_160805")
 
     df_pipeline_predicted = model.transform(df)
     df_pipeline_predicted.select("PassengerId", "Survival", "prediction").show(

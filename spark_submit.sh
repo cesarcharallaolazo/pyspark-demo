@@ -1,5 +1,5 @@
-make -f Makefile_0 build &&\
+make build &&\
 cd target &&\
 
-spark_submit_cmd="spark-submit --master local[*] --deploy-mode client --py-files run_modeling.py run_modeling.py "
+spark_submit_cmd="spark-submit --master local[*] --deploy-mode client --py-files spark.zip run_modeling.py --root_path /home/jovyan/SparkProjects/Project1/source_data/ --checkpoint_path /home/jovyan/SparkProjects/Project1/source_data/checkpoints/ "
 eval $spark_submit_cmd
