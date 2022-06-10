@@ -48,11 +48,6 @@ def train_titanic(spark: SparkSession, info):
         .setOutputCol("SexIndex") \
         .setHandleInvalid("keep")
 
-    cabinIndexer = StringIndexer() \
-        .setInputCol("Cabin") \
-        .setOutputCol("CabinIndex") \
-        .setHandleInvalid("keep")
-
     embarkedIndexer = StringIndexer() \
         .setInputCol("Embarked") \
         .setOutputCol("EmbarkedIndex") \
@@ -60,34 +55,38 @@ def train_titanic(spark: SparkSession, info):
 
     vectorAssembler = VectorAssembler() \
         .setInputCols(
-        ["Pclass", "SexIndex", "Age", "SibSp", "Parch", "Fare", "CabinIndex",
-         "EmbarkedIndex"]) \
+        ["Pclass", "SexIndex", "Age", "SibSp", "Parch", "Fare", "EmbarkedIndex"]) \
         .setOutputCol("features")
 
-    # rf = RandomForestClassifier(
-    #     featuresCol="features",
-    #     labelCol='Survival',
-    #     predictionCol="prediction",
-    #     numTrees=50,
-    #     maxDepth=11
-    # )
-
-    lr = LogisticRegression(
+    rf = RandomForestClassifier(
         featuresCol="features",
         labelCol='Survival',
         predictionCol="prediction",
-        maxIter=5,
-        regParam=1,
-        elasticNetParam=0,
-        tol=0.001
+        numTrees=50,
+        maxDepth=11
     )
-    lr_params = {param[0].name: param[1] for param in
-                 lr.extractParamMap().items()}
+
+    rf_params = {param[0].name: param[1] for param in
+                 rf.extractParamMap().items()}
     print("hyperparameters ->", flush=True)
-    print(lr_params, flush=True)
+    print(rf_params, flush=True)
+
+    # lr = LogisticRegression(
+    #     featuresCol="features",
+    #     labelCol='Survival',
+    #     predictionCol="prediction",
+    #     maxIter=5,
+    #     regParam=1,
+    #     elasticNetParam=0,
+    #     tol=0.001
+    # )
+    # lr_params = {param[0].name: param[1] for param in
+    #              lr.extractParamMap().items()}
+    # print("hyperparameters ->", flush=True)
+    # print(lr_params, flush=True)
 
     pipeline = Pipeline().setStages(
-        [sexIndexer, cabinIndexer, embarkedIndexer, vectorAssembler, lr]
+        [sexIndexer, embarkedIndexer, vectorAssembler, rf]
     )
 
     trainDF, testDF = df.randomSplit([0.8, 0.2], seed=24)
@@ -138,7 +137,7 @@ def predict_titanic(spark: SparkSession, info):
 
     df = df_raw.na.fill(0)
 
-    model = get_model(info, "20220906_160805")
+    model = get_model(info, "20220906_233628")
 
     df_pipeline_predicted = model.transform(df)
     df_pipeline_predicted.select("PassengerId", "Survival", "prediction").show(
