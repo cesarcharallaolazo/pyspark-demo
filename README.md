@@ -16,4 +16,6 @@
 
         docker run --rm -v $PWD:/home/jovyan/SparkProjects/Project1/ --name spark_submit_run_pyspark_demo pyspark-demo:latest
         
-6. 
+6. Run pyspark pipeline as emr step
+
+        make -f Makefile_files_to_s3_submit

@@ -137,7 +137,7 @@ def predict_titanic(spark: SparkSession, info):
 
     df = df_raw.na.fill(0)
 
-    model = get_model(info, "20220906_233628")
+    model = get_model(info, "20221106_025255")
 
     df_pipeline_predicted = model.transform(df)
     df_pipeline_predicted.select("PassengerId", "Survival", "prediction").show(

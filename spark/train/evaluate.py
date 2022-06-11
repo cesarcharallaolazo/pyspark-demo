@@ -8,34 +8,34 @@ from pyspark.ml import PipelineModel, Pipeline
 from pyspark.ml.feature import StringIndexer, VectorAssembler
 from pyspark.ml.evaluation import BinaryClassificationEvaluator, MulticlassClassificationEvaluator
 
-import pandas as pd
-from sklearn.metrics import classification_report, confusion_matrix
+# import pandas as pd
+# from sklearn.metrics import classification_report, confusion_matrix
 from data_io.load import *
 from utils.constant import *
 
 
-def print_mc(info, matriz_conf, dataset_type="train"):
-    matriz_conf = pd.DataFrame(matriz_conf)
-    matriz_conf.index = ["Real_0", "Real_1"]
-    matriz_conf.columns = ["Pred_0", "Pred_1"]
-    # matriz_conf.to_csv(info + f"confusion_matrix/cm_{dataset_type}.csv", index=False)
+# def print_mc(info, matriz_conf, dataset_type="train"):
+#     matriz_conf = pd.DataFrame(matriz_conf)
+#     matriz_conf.index = ["Real_0", "Real_1"]
+#     matriz_conf.columns = ["Pred_0", "Pred_1"]
+#     # matriz_conf.to_csv(info + f"confusion_matrix/cm_{dataset_type}.csv", index=False)
+#
+#     print(matriz_conf)
 
-    print(matriz_conf)
 
-
-def evaluation(info, model, data, labelCol="default", dataset_type="train"):
-    predictions = model.transform(data)
-    evaluator = BinaryClassificationEvaluator(labelCol=labelCol, metricName="areaUnderROC")
-    auc = evaluator.evaluate(predictions)
-    print('Area Under ROC', auc)
-
-    # EVALUATION
-    y_true = predictions.select(labelCol).collect()
-    y_pred = predictions.select('prediction').collect()
-    print(classification_report(y_true, y_pred))
-
-    matriz_conf = confusion_matrix(y_true, y_pred)
-    print_mc(info, matriz_conf, dataset_type)
+# def evaluation(info, model, data, labelCol="default", dataset_type="train"):
+#     predictions = model.transform(data)
+#     evaluator = BinaryClassificationEvaluator(labelCol=labelCol, metricName="areaUnderROC")
+#     auc = evaluator.evaluate(predictions)
+#     print('Area Under ROC', auc)
+#
+#     # EVALUATION
+#     y_true = predictions.select(labelCol).collect()
+#     y_pred = predictions.select('prediction').collect()
+#     print(classification_report(y_true, y_pred))
+#
+#     matriz_conf = confusion_matrix(y_true, y_pred)
+#     print_mc(info, matriz_conf, dataset_type)
 
 
 def get_metric(df_predictions, labelCol="target", predictionCol="prediction",

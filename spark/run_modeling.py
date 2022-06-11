@@ -65,11 +65,11 @@ if __name__ == '__main__':
     # sc.setLogLevel("WARN")
     sc.setLogLevel("ERROR")
 
-    # SPARK LOGIC
-    print("Hello World", "Spark pipeline !!")
-    print("python version --> ", sys.version)
-    print("pyspark version --> ", sc.version)
-    print("pyspark version --> ", spark.version)
+    # # SPARK LOGIC
+    # print("Hello World", "Spark pipeline !!")
+    # print("python version --> ", sys.version)
+    # print("pyspark version --> ", sc.version)
+    # print("pyspark version --> ", spark.version)
 
     # TITANIC DEMO
     titanic.run(spark, args)
