@@ -37,11 +37,12 @@ def convert_parquet_to_csv(spark: SparkSession, path_parquet: str, path_csv: str
 
 
 def model_writer(model, info):
-    now = datetime.now()  # current date and time
-    now_str = now.strftime("%Y%d%m_%H%M%S")
-
-    model.save(info[pysparkml_model_path] + f"{now_str}/model")
+    # now = datetime.now()  # current date and time
+    # now_str = now.strftime("%Y%d%m_%H%M%S")
+    # model.save(info[pysparkml_model_path] + f"{now_str}/model")
+    model.save(info[pysparkml_model_path] + f"{info[model_name]}/model")
 
 
 def get_model(info, name):
-    return PipelineModel.load(info[pysparkml_model_path] + f"{name}/model")
+    # return PipelineModel.load(info[pysparkml_model_path] + f"{name}/model")
+    return PipelineModel.load(info[pysparkml_model_path] + f"{info[model_name]}/model")

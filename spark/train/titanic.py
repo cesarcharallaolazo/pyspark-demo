@@ -137,7 +137,7 @@ def predict_titanic(spark: SparkSession, info):
 
     df = df_raw.na.fill(0)
 
-    model = get_model(info, "20221106_025255")
+    model = get_model(info, "20221106_172927")
 
     df_pipeline_predicted = model.transform(df)
     df_pipeline_predicted.select("PassengerId", "Survival", "prediction").show(
@@ -156,7 +156,14 @@ def predict_titanic(spark: SparkSession, info):
 
 def run(spark: SparkSession, info):
     # ** 1. train a pyspark model
-    train_titanic(spark, info)
+    # train_titanic(spark, info)
 
     # ** 2. predict with a pyspark model
     # predict_titanic(spark, info)
+
+    if info[pipeline_type] == "training":
+        train_titanic(spark, info)
+    elif info[pipeline_type] == "prediction":
+        predict_titanic(spark, info)
+    else:
+        raise Exception("Set pipeline type !")

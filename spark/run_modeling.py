@@ -21,8 +21,13 @@ def parse_cli_args():
     parser.add_argument('--root_path', action='store', dest=root_path, type=str,
                         help='Store', default=None)
 
-    parser.add_argument('--checkpoint_path', action='store',
-                        dest=checkpoint_path, type=str,
+    parser.add_argument('--checkpoint_path', action='store', dest=checkpoint_path, type=str,
+                        help='Store', default=None)
+
+    parser.add_argument('--pipeline_type', action='store', dest=pipeline_type, type=str,
+                        help='Store', default=None)
+
+    parser.add_argument('--model_name', action='store', dest=model_name, type=str,
                         help='Store', default=None)
 
     parser.add_argument('--app_env', action='store', dest=app_env, type=str,

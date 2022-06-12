@@ -1,8 +1,7 @@
-from pyspark.sql.types import *
-from pyspark.sql.functions import *
-
 root_path = "root_path"
 checkpoint_path = "checkpoint_path"
+pipeline_type = "pipeline_type"
+model_name = "model_name"
 year_month = "year_month"
 country = "country"
 org = "org"
